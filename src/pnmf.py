@@ -13,14 +13,14 @@ def check_non_negativity(X):
 	else:
 		return -1
 
-def mul_update(X, n_components=None, max_iter=200):
+def pnmf(X, alpha=0.3, beta=0.3, n_components=None, max_iter=200):
 
 	if check_non_negativity(X):
 		print "Invalid Input"
 		return -1
 
     W = random.rand(X.shape[0], n_components)
-    H = random.rand(X.shape[1], n_components)
+    H = random.rand(n_components, X.shape[1])
 
 
     list_reconstruction_err_ = []
@@ -31,21 +31,21 @@ def mul_update(X, n_components=None, max_iter=200):
 
     for n_iter in range(1, max_iter + 1):
 
-        AtW = X.T.dot(W)
-        HWtW = H.dot(W.T.dot(W)) + eps
-        H = H * AtW
+        XtW = (W.T).dot(X)
+        HWtW = ((W.T.dot(W)).dot(H) + beta*H) 
+        H = H * XtW
         H = H / HWtW
 
-        AH = X.dot(H)
-        WHtH = W.dot(H.T.dot(H)) +eps
-        W = W * AH
+        XH = X.dot(H.T)
+        WHtH = (W.dot(H.T.dot(H)) + alpha*W)
+        W = W * XH
         W = W / WHtH
 
-        reconstruction_err_ = LA.norm(X - np.dot(W, H.T))
+        reconstruction_err_ = LA.norm(X - np.dot(W, H))
         list_reconstruction_err_.append(reconstruction_err_)
 
 
     print "Reconstruction Error: " + str(list_reconstruction_err_[-1])
 
-    return  ( np.squeeze(np.asarray(W)),np.squeeze(np.asarray(H.T)),
+    return  ( np.squeeze(np.asarray(W)),np.squeeze(np.asarray(H)),
             list_reconstruction_err_[-1])
