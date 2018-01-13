@@ -1,5 +1,8 @@
 # libNMF
 
+The project contains implementations of different optimization and regularization variants of non-negative matrix factorization.
+
+
 ## References
 
 * Lee, D. D., & Seung, H. S. (2001). Algorithms for non-negative matrix factorization. In Advances in neural information processing systems (pp. 556-562).
