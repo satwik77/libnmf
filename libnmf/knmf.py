@@ -1,3 +1,14 @@
+#Author: Satwik Bhattamishra
+
+"""
+Kernel NMF:
+
+[4] Zhang, D., Zhou, Z. H., & Chen, S. (2006). Non-negative matrix 
+    factorization on kernels. PRICAI 2006: Trends in Artificial Intelligence, 404-412.
+
+"""
+
+
 import numpy as np
 import pandas as pd
 from numpy import random
