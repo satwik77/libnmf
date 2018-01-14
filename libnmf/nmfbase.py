@@ -8,6 +8,7 @@ Base class used in most of the methods
 import numpy as np
 import scipy.sparse
 import numpy.linalg as LA
+from scipy.stats import entropy
 from sys import exit
 
 class NMFBase():
@@ -21,6 +22,7 @@ class NMFBase():
 		self.X_dim, self._samples = self.X.shape
 		
 	def frobenius_norm(self):
+		""" Euclidean error between X and W*H """
 
 		if hasattr(self,'H') and hasattr(self,'W'):
 			error = LA.norm(self.X - np.dot(self.W, self.H))            
@@ -28,15 +30,26 @@ class NMFBase():
 			error = None
 
 		return error
+
+    def kl_divergence(self):
+        """ KL Divergence between X and W*H """
+
+		if hasattr(self,'H') and hasattr(self,'W'):
+			V = np.dot(self.W, self.H)
+			error = entropy(self.X, V).sum()        
+		else:
+			error = None
+
+		return error
 		
 	def initialize_w(self):
-		""" Initalize W to random values [0,1].
-		"""
+		""" Initalize W to random values [0,1]."""
+
 		self.W = np.random.random((self.X_dim, self._rank)) 
 		
 	def initialize_h(self):
-		""" Initalize H to random values [0,1].
-		"""
+		""" Initalize H to random values [0,1]."""
+
 		self.H = np.random.random((self._rank, self._samples)) 
 		
 	def update_h(self):
