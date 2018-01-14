@@ -8,7 +8,7 @@ Base class used in most of the methods
 import numpy as np
 import scipy.sparse
 import numpy.linalg as LA
-
+from sys import exit
 
 class NMFBase():
 	
@@ -49,13 +49,19 @@ class NMFBase():
 
 
 	def check_non_negativity(self):
-		if self.X.min()<0:
-			return 1
-		else:
-			return -1
 
-	def computer_factors(self, max_iter=100):
-		
+		if self.X.min()<0:
+			return 0
+		else:
+			return 1
+
+	def compute_factors(self, max_iter=100):
+		if self.check_non_negativity():
+			pass
+		else:
+			print "The given matrix contains negative values"
+			exit()
+
 		if not hasattr(self,'W'):
 			self.initialize_w()
 			   

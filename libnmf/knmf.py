@@ -3,61 +3,79 @@
 """
 Kernel NMF:
 
-[4] Zhang, D., Zhou, Z. H., & Chen, S. (2006). Non-negative matrix 
-    factorization on kernels. PRICAI 2006: Trends in Artificial Intelligence, 404-412.
+[5] Zhang, D., Zhou, Z. H., & Chen, S. (2006). Non-negative matrix 
+	factorization on kernels. PRICAI 2006: Trends in Artificial Intelligence, 404-412.
 
 """
 
 
 import numpy as np
-import pandas as pd
 from numpy import random
 import numpy.linalg as LA
 import scipy.sparse as sp
-import itertools
-from kernels.rbf import rbf
+from nmfbase import NMFBase
+from libnmf.kernels.rbf import rbf
+from sys import exit
+
+class KNMF(NMFBase):
+
+	"""
+
+	Attributes
+	----------
+	W : matrix of basis vectors
+	H : matrix of coefficients
+	frob_error : frobenius norm 
+
+	"""
+
+	def compute_kernel_mapping(self, kernel_type='rbf', param=0.3):
+		
+		if kernel_type == 'rbf':
+			A = rbf(self.X, param)
+			return A
+		
+		else:
+			return self.X
+		
+
+	def compute_factors(self, max_iter=100, kernel_type='rbf', param=None):
+	
+		if self.check_non_negativity():
+			pass
+		else:
+			print "The given matrix contains negative values"
+			exit()
+
+		if not hasattr(self,'W'):
+			self.initialize_w()
+			   
+		if not hasattr(self,'H'):
+			self.initialize_h()              
+
+		A = self.compute_kernel_mapping(kernel_type, param)
+
+		self.frob_error = np.zeros(max_iter)
+
+		for i in xrange(max_iter):
+
+			self.update_w(A)
+
+			self.update_h(A)                                        
+		 
+			self.frob_error[i] = self.frobenius_norm()   
+	   
+	def update_h(self, A):
+		
+		AtW = np.dot(self.W.T, A)
+		HWtW = np.dot(self.W.T.dot(self.W), self.H)
+		self.H *= AtW
+		self.H /= HWtW
 
 
-def check_non_negativity(X):
-	if X.min()<0:
-		return 1
-	else:
-		return -1
+	def update_w(self, A):
 
-def knmf(X, param=0, n_components=None, max_iter=200):
-
-	if check_non_negativity(X):
-		print "Invalid Input"
-		return -1
-
-    A = rbf(X, param)
-    W = random.rand(A.shape[0], n_components)
-    H = random.rand(A.shape[1], n_components)
-
-
-    list_reconstruction_err_ = []
-    reconst_err_ = LA.norm(A - np.dot(W, H))
-    list_reconstruction_err_.append(reconstruction_err_)
-
-    eps = np.spacing(1) 
-
-    for n_iter in range(1, max_iter + 1):
-
-        AtW = A.T.dot(W)
-        HWtW = H.dot(W.T.dot(W)) + eps
-        H = H * AtW
-        H = H / HWtW
-
-        AH = A.dot(H)
-        WHtH = W.dot(H.T.dot(H)) +eps
-        W = W * AH
-        W = W / WHtH
-
-        reconstruction_err_ = LA.norm(A - np.dot(W, H.T))
-        list_reconstruction_err_.append(reconstruction_err_)
-
-
-    print "Reconstruction Error: " + str(list_reconstruction_err_[-1])
-
-    return  ( np.squeeze(np.asarray(W)),np.squeeze(np.asarray(H.T)),
-            list_reconstruction_err_[-1])
+		AH = A.dot(self.H.T)
+		WHtH = self.W.dot(self.H.dot(self.H.T))
+		self.W *= AH
+		self.W /= WHtH

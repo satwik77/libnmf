@@ -1,51 +1,72 @@
+#Author: Satwik Bhattamishra
+
+"""
+Probabilistic NMF:
+
+[4] Bayar, B., Bouaynaya, N., & Shterenberg, R. (2014). Probabilistic 
+    non-negative matrix factorization: theory and application to microarray data analysis. 
+    Journal of bioinformatics and computational biology, 12(01), 1450001.
+
+"""
+
+
 import numpy as np
-import pandas as pd
 from numpy import random
 import numpy.linalg as LA
-import scipy.sparse as sp
-import itertools
+from nmfbase import NMFBase
+from sys import exit
+
+
+class PNMF(NMFBase):
+
+    """
+
+    Attributes
+    ----------
+    W : matrix of basis vectors
+    H : matrix of coefficients
+    frob_error : frobenius norm
+
+    """
+       
+    def compute_factors(self, max_iter=100, alpha= 0.2, beta= 0.2):
+    
+        if self.check_non_negativity():
+            pass
+        else:
+            print "The given matrix contains negative values"
+            exit()
+
+        if not hasattr(self,'W'):
+            self.initialize_w()
+               
+        if not hasattr(self,'H'):
+            self.initialize_h()
+
+        self.frob_error = np.zeros(max_iter)
+
+        for i in xrange(max_iter):
+
+            self.update_h(alpha)  
+            self.update_w(beta)                                      
+         
+            self.frob_error[i] = self.frobenius_norm()   
+
+
+    def update_h(self, beta):
+
+        XtW = np.dot(self.W.T, self.X)
+        HWtW = np.dot(self.W.T.dot(self.W), self.H ) + beta+ 2**-8
+        self.H *= XtW
+        self.H /= HWtW
 
 
 
-def check_non_negativity(X):
-	if X.min()<0:
-		return 1
-	else:
-		return -1
+    def update_w(self, alpha):
 
-def pnmf(X, alpha=0.3, beta=0.3, n_components=None, max_iter=200):
-
-	if check_non_negativity(X):
-		print "Invalid Input"
-		return -1
-
-    W = random.rand(X.shape[0], n_components)
-    H = random.rand(n_components, X.shape[1])
+        XH = self.X.dot(self.H.T)
+        WHtH = self.W.dot(self.H.dot(self.H.T)) + alpha+ 2**-8
+        self.W *= XH
+        self.W /= WHtH
 
 
-    list_reconstruction_err_ = []
-    reconst_err_ = LA.norm(X - np.dot(W, H))
-    list_reconstruction_err_.append(reconstruction_err_)
-
-    eps = np.spacing(1) 
-
-    for n_iter in range(1, max_iter + 1):
-
-        XtW = (W.T).dot(X)
-        HWtW = ((W.T.dot(W)).dot(H) + beta*H) 
-        H = H * XtW
-        H = H / HWtW
-
-        XH = X.dot(H.T)
-        WHtH = (W.dot(H.T.dot(H)) + alpha*W)
-        W = W * XH
-        W = W / WHtH
-
-        reconstruction_err_ = LA.norm(X - np.dot(W, H))
-        list_reconstruction_err_.append(reconstruction_err_)
-
-
-    print "Reconstruction Error: " + str(list_reconstruction_err_[-1])
-
-    return  ( np.squeeze(np.asarray(W)),np.squeeze(np.asarray(H)),
-            list_reconstruction_err_[-1])
