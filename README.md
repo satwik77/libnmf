@@ -1,6 +1,15 @@
 # libNMF
 
-The project contains implementations of different optimization and regularization variants of non-negative matrix factorization.
+The library contains implementations of different optimization and regularization variants of non-negative matrix factorization.
+
+List of algorithms implemented:
+1. Multiplicative Update Rule (nmf.py)
+2. Alternating Least Squares NMF (alsnmf.py)
+3. Graph Regularized NMF (gnmf.py)
+4. Probabilistc NMF (pnmf.py)
+5. Kernel NMF (knmf.py)
+6. Chambolle-Pock based first-order primal dual algo (fpdnmf.py)
+
 
 ## Setup:
 
@@ -29,13 +38,21 @@ Install the library by running the following command from the root directory of 
 ## Usage:
 
 	>>> import numpy as np
+
+	>>> # For Graph Regularized NMF
 	>>> from libnmf.gnmf import GNMF
-	
 	>>> X = np.random.random((10,10))
 	>>> gnmf= GNMF(X, rank=4)
-	>>> gnmf.compute_factors(20, 0.3, 'heat-kernel', 0.4)
-	>>> print gnmf.W
-	>>> print gnmf.frob_error
+	>>> gnmf.compute_factors(max_iter= 20, lmd= 0.3, weight_type='heat-kernel', param= 0.4)
+
+	>>> # For first-order primal-dual algo
+	>>> from libnmf.fpdnmf import FPDNMF
+	>>> fpdnmf= FPDNMF(X, rank=4)
+	>>> fpdnmf.compute_factors(max_iter=30, nditer=5)
+	>>> #print fpdnmf.W, fpdnmf.H, fpdnmf.div_error
+
+
+Refer to examples/Simple-Usage.ipynb for more on usage.
 
 ## References
 
@@ -48,3 +65,5 @@ Install the library by running the following command from the root directory of 
 * [4] Bayar, B., Bouaynaya, N., & Shterenberg, R. (2014). Probabilistic non-negative matrix factorization: theory and application to microarray data analysis. Journal of bioinformatics and computational biology, 12(01), 1450001. [Paper](https://pdfs.semanticscholar.org/18c2/302cbf1fe01a8338a186999b69abc5701c2e.pdf)
 
 * [5] Zhang, D., Zhou, Z. H., & Chen, S. (2006). Non-negative matrix factorization on kernels. PRICAI 2006: Trends in Artificial Intelligence, 404-412. [Paper](https://cs.nju.edu.cn/zhouzh/zhouzh.files/publication/pricai06a.pdf)
+
+* [6] Yanez, Felipe, and Francis Bach. "Primal-dual algorithms for non-negative matrix factorization with the Kullback-Leibler divergence." In Acoustics, Speech and Signal Processing (ICASSP), 2017 IEEE International Conference on, pp. 2257-2261. IEEE, 2017. [Paper](https://arxiv.org/pdf/1412.1788.pdf)

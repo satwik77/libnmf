@@ -2,7 +2,7 @@
 # License: MIT
 
 """
-Base class used in most of the methods
+Base class used all the methods
 
 """
 import numpy as np
@@ -31,8 +31,8 @@ class NMFBase():
 
 		return error
 
-    def kl_divergence(self):
-        """ KL Divergence between X and W*H """
+	def kl_divergence(self):
+		""" KL Divergence between X and W*H """
 
 		if hasattr(self,'H') and hasattr(self,'W'):
 			V = np.dot(self.W, self.H)
