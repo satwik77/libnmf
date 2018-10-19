@@ -3,7 +3,7 @@
 """
 Classical NMF (Multiplicative Update Rule):
 
-[1] Lee, D. D., & Seung, H. S. (2001). Algorithms for non-negative matrix factorization. 
+[1] Lee, D. D., & Seung, H. S. (2001). Algorithms for non-negative matrix factorization.
 	In Advances in neural information processing systems (pp. 556-562).
 
 """
@@ -12,7 +12,7 @@ import numpy as np
 from numpy import random
 import numpy.linalg as LA
 import scipy.sparse as sp
-from nmfbase import NMFBase
+from .nmfbase import NMFBase
 
 
 
@@ -40,7 +40,7 @@ class NMF(NMFBase):
 	>>> nmf.frob_error
 
 	"""
-	   
+
 	def update_h(self):
 
 		XtW = np.dot(self.W.T, self.X)

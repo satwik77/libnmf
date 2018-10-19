@@ -1,6 +1,6 @@
-numpy
-scipy
-cvxopt
+numpy>=1.1.0
+scipy>=1.1.0
+cvxopt>=1.2.0
 
 
 

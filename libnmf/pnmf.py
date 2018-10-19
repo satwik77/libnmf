@@ -3,8 +3,8 @@
 """
 Probabilistic NMF:
 
-[4] Bayar, B., Bouaynaya, N., & Shterenberg, R. (2014). Probabilistic 
-    non-negative matrix factorization: theory and application to microarray data analysis. 
+[4] Bayar, B., Bouaynaya, N., & Shterenberg, R. (2014). Probabilistic
+    non-negative matrix factorization: theory and application to microarray data analysis.
     Journal of bioinformatics and computational biology, 12(01), 1450001.
 
 """
@@ -13,7 +13,7 @@ Probabilistic NMF:
 import numpy as np
 from numpy import random
 import numpy.linalg as LA
-from nmfbase import NMFBase
+from .nmfbase import NMFBase
 from sys import exit
 
 
@@ -28,29 +28,29 @@ class PNMF(NMFBase):
     frob_error : frobenius norm
 
     """
-       
+
     def compute_factors(self, max_iter=100, alpha= 0.2, beta= 0.2):
-    
+
         if self.check_non_negativity():
             pass
         else:
-            print "The given matrix contains negative values"
+            print("The given matrix contains negative values")
             exit()
 
         if not hasattr(self,'W'):
             self.initialize_w()
-               
+
         if not hasattr(self,'H'):
             self.initialize_h()
 
         self.frob_error = np.zeros(max_iter)
 
-        for i in xrange(max_iter):
+        for i in range(max_iter):
 
-            self.update_h(alpha)  
-            self.update_w(beta)                                      
-         
-            self.frob_error[i] = self.frobenius_norm()   
+            self.update_h(alpha)
+            self.update_w(beta)
+
+            self.frob_error[i] = self.frobenius_norm()
 
 
     def update_h(self, beta):

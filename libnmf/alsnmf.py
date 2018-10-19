@@ -13,7 +13,7 @@ from cvxopt import matrix, solvers
 import numpy as np
 from numpy import random
 import numpy.linalg as LA
-from nmfbase import NMFBase
+from .nmfbase import NMFBase
 import cvxopt
 
 
@@ -27,7 +27,7 @@ class ALSNMF(NMFBase):
     frob_error : frobenius norm
 
     """
-       
+
     def update_h(self):
 
         WtW= np.float64(np.dot(self.W.T, self.W))       #Float64 for cvxopt
@@ -41,7 +41,7 @@ class ALSNMF(NMFBase):
 
             sol = solvers.qp(Q, p, G, h )
             self.H[:,i] = np.array(sol['x']).reshape((1,-1))
-            
+
 
 
     def update_w(self):
@@ -57,7 +57,7 @@ class ALSNMF(NMFBase):
 
             sol = solvers.qp(Q, p, G, h)
             self.W[i,:] = np.array(sol['x']).reshape((1,-1))
-            
+
 
 
 

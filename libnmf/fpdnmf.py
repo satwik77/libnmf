@@ -5,8 +5,8 @@ Chambolle-Pock based First-order Primal-dual Algo for NMF:
 (Minimizes KL Divergence)
 
 [6] Yanez, Felipe, and Francis Bach. "Primal-dual algorithms for
-	non-negative matrix factorization with the Kullback-Leibler divergence." 
-	In Acoustics, Speech and Signal Processing (ICASSP), 2017 IEEE International 
+	non-negative matrix factorization with the Kullback-Leibler divergence."
+	In Acoustics, Speech and Signal Processing (ICASSP), 2017 IEEE International
 	Conference on, pp. 2257-2261. IEEE, 2017.
 
 """
@@ -15,7 +15,7 @@ Chambolle-Pock based First-order Primal-dual Algo for NMF:
 import numpy as np
 from numpy import random
 import numpy.linalg as LA
-from nmfbase import NMFBase
+from .nmfbase import NMFBase
 from sys import exit
 
 
@@ -32,7 +32,7 @@ class FPDNMF(NMFBase):
 
 	"""
 	def initialize_vars(self):
-		
+
 		self.Wbar= self.W
 		self.Wold= self.W
 
@@ -42,18 +42,18 @@ class FPDNMF(NMFBase):
 		self.chi = -self.X / np.dot(self.W, self.H)
 		self.chi1 = np.max( (np.dot(self.W.T, self.chi).T * (1.0/np.sum(self.W, 0))).T  , 0)
 		self.chi = self.chi* (1.0/self.chi1)
-	   
+
 	def compute_factors(self, max_iter=100, nditer=5):
-	
+
 		if self.check_non_negativity():
 			pass
 		else:
-			print "The given matrix contains negative values"
+			print("The given matrix contains negative values")
 			exit()
 
 		if not hasattr(self,'W'):
 			self.initialize_w()
-			   
+
 		if not hasattr(self,'H'):
 			self.initialize_h()
 
@@ -69,7 +69,7 @@ class FPDNMF(NMFBase):
 		self.frob_error = np.zeros(max_iter)
 		self.div_error = np.zeros(max_iter)
 
-		for i in xrange(max_iter):
+		for i in range(max_iter):
 
 			sigma= (np.sum(self.W) / np.sum(self.X, 0)) / LA.norm(self.W)
 			sigma *= np.power(n/r, 0.5)
@@ -77,7 +77,7 @@ class FPDNMF(NMFBase):
 			tau= ( np.sum(self.X, 0) / np.sum(self.W) ) / LA.norm(self.W)
 			tau *= np.power(r/n, 0.5)
 
-			for j in xrange(nditer):
+			for j in range(nditer):
 				self.update_h(sigma, tau)
 
 
@@ -88,11 +88,11 @@ class FPDNMF(NMFBase):
 			tau= ( np.sum(self.X, 1) / np.sum(self.H) ) / LA.norm(self.H)
 			tau *= np.power(r/m, 0.5)
 
-			for j in xrange(nditer):      
-				self.update_w(sigma, tau)                                      
-		 
-			self.frob_error[i] = self.frobenius_norm() 
-			self.div_error[i] = self.kl_divergence()  
+			for j in range(nditer):
+				self.update_w(sigma, tau)
+
+			self.frob_error[i] = self.frobenius_norm()
+			self.div_error[i] = self.kl_divergence()
 
 
 	def update_h(self, sigma, tau):
