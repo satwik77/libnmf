@@ -2,7 +2,7 @@ import os
 from setuptools import setup, find_packages
 
 setup(name='libNMF',
-      version='0.1.0',
+      version='0.1.1',
       description='Optimization and Regularization variants of NMF',
       author='Satwik Bhattamishra',
       author_email='satwik55@gmail.com',
@@ -18,9 +18,6 @@ setup(name='libNMF',
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
     ],
       )

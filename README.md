@@ -11,45 +11,61 @@ List of algorithms implemented:
 6. Chambolle-Pock based first-order primal dual algo (fpdnmf.py)
 
 
+
+
+
+
 ## Setup:
 
 To get the project's source code, clone the github repository:
 
-    $ git clone https://github.com/satwik77/libnmf.git
+```shell
+$ git clone https://github.com/satwik77/libnmf.git
+```
 
 Install VirtualEnv using the following (optional):
 
-    $ [sudo] pip install virtualenv
+```shell
+$ [sudo] pip install virtualenv
+```
 
 Create and activate your virtual environment (optional):
 
-    $ virtualenv venv
-    $ source venv/bin/activate
+```shell
+$ virtualenv venv
+$ source venv/bin/activate
+```
 
 Install all the required packages:
 
-	$ pip install -r requirements.txt
+```shell
+$ pip install -r requirements.txt
+```
 
 Install the library by running the following command from the root directory of the repository:
 
-	$ python setup.py install
+```shell
+$ python setup.py install	
+```
 
 
 ## Usage:
 
-	>>> import numpy as np
+```python
+>>> import numpy as np
 
-	>>> # For Graph Regularized NMF
-	>>> from libnmf.gnmf import GNMF
-	>>> X = np.random.random((10,10))
-	>>> gnmf= GNMF(X, rank=4)
-	>>> gnmf.compute_factors(max_iter= 20, lmd= 0.3, weight_type='heat-kernel', param= 0.4)
+>>> # For Graph Regularized NMF
+>>> from libnmf.gnmf import GNMF
+>>> X = np.random.random((10,10))
+>>> gnmf= GNMF(X, rank=4)
+>>> gnmf.compute_factors(max_iter= 20, lmd= 0.3, weight_type='heat-kernel', param= 0.4)
 
-	>>> # For first-order primal-dual algo
-	>>> from libnmf.fpdnmf import FPDNMF
-	>>> fpdnmf= FPDNMF(X, rank=4)
-	>>> fpdnmf.compute_factors(max_iter=30, nditer=5)
-	>>> #print fpdnmf.W, fpdnmf.H, fpdnmf.div_error
+>>> # For first-order primal-dual algo
+>>> from libnmf.fpdnmf import FPDNMF
+>>> fpdnmf= FPDNMF(X, rank=4)
+>>> fpdnmf.compute_factors(max_iter=30, nditer=5)
+>>> #print fpdnmf.W, fpdnmf.H, fpdnmf.div_error
+```
 
 
 Refer to examples/Simple-Usage.ipynb for more on usage.
