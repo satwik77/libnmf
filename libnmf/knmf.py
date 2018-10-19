@@ -13,7 +13,7 @@ import numpy as np
 from numpy import random
 import numpy.linalg as LA
 import scipy.sparse as sp
-from nmfbase import NMFBase
+from .nmfbase import NMFBase
 from .kernels.rbf import rbf
 from sys import exit
 

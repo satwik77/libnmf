@@ -2,7 +2,7 @@ import os
 from setuptools import setup, find_packages
 
 setup(name='libNMF',
-      version='0.1.1',
+      version='0.1.2',
       description='Optimization and Regularization variants of NMF',
       author='Satwik Bhattamishra',
       author_email='satwik55@gmail.com',
