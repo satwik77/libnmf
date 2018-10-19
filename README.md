@@ -1,5 +1,7 @@
 # libNMF
 
+[![PyPI version shields.io](https://img.shields.io/pypi/v/libnmf.svg)](https://pypi.python.org/pypi/libnmf)  [![Build Status](https://travis-ci.org/satwik77/libnmf.svg?branch=master)](https://travis-ci.org/satwik77/libnmf) [![PyPI license](https://img.shields.io/pypi/l/ansicolortags.svg)](https://pypi.python.org/pypi/ansicolortags/)
+
 The library contains implementations of different optimization and regularization variants of non-negative matrix factorization.
 
 List of algorithms implemented:
@@ -16,6 +18,14 @@ List of algorithms implemented:
 
 
 ## Setup:
+
+#### Stable:
+
+```shell
+$ pip install -U libnmf
+```
+
+#### Dev:
 
 To get the project's source code, clone the github repository:
 
